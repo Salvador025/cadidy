@@ -1,2 +1,2 @@
-# Cadidy
+# cadidy
 Service app
