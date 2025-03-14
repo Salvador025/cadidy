@@ -68,6 +68,15 @@ flutter:
   assets:
     - assets/images/Icono.webp
     - assets/images/WorkerWP.jpeg.webp
+    - assets/images/cleaning_service.png
+    - assets/images/gardening_service.png
+    - assets/images/electrician_service.png
+    - assets/images/carpenter_service.png
+    - assets/images/barbering_service.png
+    - assets/images/makeup_service.png
+    - assets/images/dogWalk_service.png
+    - assets/images/veterinarian_service.png
+    - assets/images/Icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
