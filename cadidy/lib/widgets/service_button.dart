@@ -1,3 +1,4 @@
+import 'package:cadidy/screens/placeOrder/place_order.dart';
 import 'package:flutter/material.dart';
 
 class ServiceButton extends StatefulWidget {
@@ -17,7 +18,14 @@ class _ServiceButtonState extends State<ServiceButton> {
       width: 125,
       padding: const EdgeInsets.all(10),
       child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context, MaterialPageRoute(
+                  builder: (context) => 
+                    PlaceOrder(labelService: widget.labelService, nameImage: widget.imageURL)
+                )
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color.fromARGB(255, 204, 253, 4),
               shape: RoundedRectangleBorder(
