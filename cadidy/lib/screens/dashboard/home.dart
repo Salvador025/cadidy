@@ -1,3 +1,6 @@
+import 'package:cadidy/screens/dashboard/notifications.dart';
+import 'package:cadidy/screens/dashboard/orders.dart';
+import 'package:cadidy/widgets/dashboard_home.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -10,25 +13,26 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var currentPage = 0;
 
+  var servicesImages = [
+    'assets/images/cleaning_service.png',
+    'assets/images/gardening_service.png',
+    'assets/images/electrician_service.png',
+    'assets/images/carpenter_service.png',
+    'assets/images/barbering_service.png',
+    'assets/images/makeup_service.png',
+    'assets/images/dogWalk_service.png',
+    'assets/images/veterinarian_service.png',
+    'assets/images/more.png',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cadidy'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text('Profile'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        ),
-      ),
-      body: Container(),
+      body: [
+        DashboardHome(),
+        Orders(),
+        Notifications(),
+      ][currentPage],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
         onDestinationSelected: (int index) {
@@ -46,12 +50,8 @@ class _HomeState extends State<Home> {
             label: 'Orders'
           ),
           NavigationDestination(
-            icon: Icon(Icons.wallet_giftcard_outlined),
-            label: 'Promotions'
-          ),
-          NavigationDestination(
             icon: Icon(Icons.notifications_outlined),
-            label: 'Notifications'
+            label: 'Notifications',
           )
         ]),
     );
