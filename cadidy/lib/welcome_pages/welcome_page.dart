@@ -53,7 +53,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 children: [
                   Column(
                     children: [
-                      Image.asset("assets/images/WorkerWP.jpeg.webp", width: 350, height: 350),
+                      Image.asset("assets/images/welcome0.jpeg", width: 350, height: 350),
                     ],
                   ),
                 ],
@@ -62,7 +62,17 @@ class _WelcomePageState extends State<WelcomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Boton1(),
+                  Boton1(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    text: "Get Started",
+                    onPressed: () {
+
+                    },
+                    ),
                 ],
               ),
             ],
