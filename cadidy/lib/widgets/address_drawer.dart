@@ -1,3 +1,5 @@
+import 'package:cadidy/screens/placeOrder/details_order.dart';
+import 'package:cadidy/screens/placeOrder/map.dart';
 import 'package:flutter/material.dart';
 
 class AddressDrawer extends StatefulWidget {
@@ -22,7 +24,7 @@ class _AddressDrawerState extends State<AddressDrawer> {
               title: Text('Add Address'),
               leading: Icon(Icons.location_on_rounded),
               onTap: () {
-                
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapScreen()));
               },
             ),
           ),
@@ -36,7 +38,7 @@ class _AddressDrawerState extends State<AddressDrawer> {
               title: Text('Add details'),
               leading: Icon(Icons.text_snippet_outlined),
               onTap: () {
-
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailsOrder()));
               },
             ),
           )
