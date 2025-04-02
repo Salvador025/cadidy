@@ -1,0 +1,1 @@
+[{"id":1,"sku":"SKU-001","nombre":"Producto 1","precio":45,"categoria":"Cat 1","disponible":"true"},{"id":2,"sku":"SKU-002","nombre":"Producto 2","precio":50,"categoria":"Cat 2","disponible":"false"},{"id":3,"sku":"SKU-003","nombre":"Producto 3","precio":60,"categoria":"Cat 1","disponible":"true"}]

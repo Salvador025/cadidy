@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690276078811",
+    "project_id": "cadidy-ac7b1",
+    "storage_bucket": "cadidy-ac7b1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690276078811:android:289f1b9beb60e7214768fe",
+        "android_client_info": {
+          "package_name": "com.example.cadidy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjm3BvXDDS2aHRjgT0IDow6mXem9bv8A8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
