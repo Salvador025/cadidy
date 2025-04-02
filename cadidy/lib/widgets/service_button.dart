@@ -2,7 +2,8 @@ import 'package:cadidy/screens/placeOrder/place_order.dart';
 import 'package:flutter/material.dart';
 
 class ServiceButton extends StatefulWidget {
-  const ServiceButton({super.key, required this.imageURL, required this.labelService});
+  const ServiceButton(
+      {super.key, required this.imageURL, required this.labelService});
   final String imageURL;
   final String labelService;
 
@@ -18,38 +19,32 @@ class _ServiceButtonState extends State<ServiceButton> {
       width: 125,
       padding: const EdgeInsets.all(10),
       child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context, MaterialPageRoute(
-                  builder: (context) => 
-                    PlaceOrder(labelService: widget.labelService, nameImage: widget.imageURL)
-                )
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 204, 253, 4),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PlaceOrder(
+                        labelService: widget.labelService,
+                        nameImage: widget.imageURL)));
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
+                  borderRadius: BorderRadius.circular(10))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                widget.imageURL,
+                color: Colors.white,
+                colorBlendMode: BlendMode.darken,
+              ),
+              Text(
+                widget.labelService,
+                style: TextStyle(color: Colors.black, fontSize: 13),
               )
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  widget.imageURL, 
-                  color: Color.fromARGB(255, 204, 253, 4),
-                  colorBlendMode: BlendMode.darken,
-                ),
-                Text(
-                  widget.labelService,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13
-                  ),
-                )
-              ],
-            )
-          ),
-      );
+            ],
+          )),
+    );
   }
 }

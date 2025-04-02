@@ -33,27 +33,45 @@ class _HomeState extends State<Home> {
         Orders(),
         Notifications(),
       ][currentPage],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPage,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.receipt_outlined),
-            label: 'Orders'
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.notifications_outlined),
-            label: 'Notifications',
-          )
-        ]),
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          backgroundColor: Color.fromARGB(255, 63, 59, 55),
+          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
+            return TextStyle(
+              color: states.contains(WidgetState.selected)
+                  ? Colors.white
+                  : Colors.white70,
+            );
+          }),
+          iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
+            return IconThemeData(
+              color: states.contains(WidgetState.selected)
+                  ? Colors.black
+                  : Colors.white,
+            );
+          }),
+        ),
+        child: NavigationBar(
+          selectedIndex: currentPage,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPage = index;
+            });
+          },
+          destinations: [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            NavigationDestination(
+                icon: Icon(Icons.receipt_outlined), label: 'Orders'),
+            NavigationDestination(
+              icon: Icon(Icons.notifications_outlined),
+              label: 'Notifications',
+            )
+          ],
+        ),
+      ),
     );
   }
 }
