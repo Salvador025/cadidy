@@ -1,12 +1,15 @@
 import 'package:cadidy/Providers/address_provider.dart';
+import 'package:cadidy/service/orders_service.dart';
+import 'package:cadidy/service/users_service.dart';
 import 'package:cadidy/widgets/address_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PlaceOrder extends StatelessWidget {
-  const PlaceOrder({super.key, required this.labelService, required this.nameImage});
+  PlaceOrder({super.key, required this.labelService, required this.nameImage});
   final String labelService;
   final String nameImage;
+  final OrdersService ordersService = OrdersService();
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +58,20 @@ class PlaceOrder extends StatelessWidget {
                     )
                   ),
                   onPressed: value.isFormValid ? () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Order placed successfully'),
-                        duration: Duration(seconds: 2),
-                      )
+                    ordersService.addOrder(
+                      UsersService.uid!, 
+                      labelService, 
+                      value.details, 
+                      value.address, 
+                      value.price
                     );
+                    context.read<AddressProvider>().reset();
+                    Navigator.pop(context);
                   } : () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Please fill in the address'),
+                        content: Text('Please fill in the all address fields'),
+                        backgroundColor: Colors.red,
                         duration: Duration(seconds: 5),
                       )
                     );

@@ -13,7 +13,10 @@ class AddressProvider with ChangeNotifier {
     double _longitude = -103.417031;
     double get longitude => _longitude;
 
-    bool get isFormValid => _address.isNotEmpty && _details.isNotEmpty;
+    double _price = 0.0;
+    double get price => _price;
+
+    bool get isFormValid => _address.isNotEmpty && _details.isNotEmpty && _price > 0.0;
 
     void setAddress(String value) {
         _address = value;
@@ -35,10 +38,17 @@ class AddressProvider with ChangeNotifier {
         notifyListeners();
     }
 
+    void setPrice(double value) {
+        _price = value;
+        notifyListeners();
+    }
+
     void reset() {
         _address = '';
-        _latitude = 0;
-        _longitude = 0;
+        _details = '';
+        _latitude = 20.608229;
+        _longitude = -103.417031;
+        _price = 0.0;
         notifyListeners();
     }
 }

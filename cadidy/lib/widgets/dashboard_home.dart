@@ -104,7 +104,7 @@ class _DashboardHomeState extends State<DashboardHome> {
                   ),
                 ),
                 onChanged: (value) {
-                  // Aquí puedes implementar la lógica de filtrado si deseas
+                  // Implement search functionality here
                 },
               ),
               SizedBox(height: 10),

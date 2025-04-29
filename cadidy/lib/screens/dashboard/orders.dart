@@ -1,78 +1,102 @@
 import 'package:cadidy/Providers/order_provider.dart';
-import 'package:cadidy/widgets/orders_drawer.dart';
+import 'package:cadidy/screens/placeOrder/edit_order.dart';
+import 'package:cadidy/service/orders_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Orders extends StatelessWidget {
+class Orders extends StatefulWidget {
   const Orders({super.key});
 
   @override
+  State<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  @override
+  void initState() {
+    super.initState();
+    // Cuando entras a esta pantalla, jalamos las órdenes
+    context.read<OrderProvider>().fetchOrders();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool hasOrders;
     return Consumer<OrderProvider>(
-      builder: (context, value, child) {
-        hasOrders = value.order;
-        if (hasOrders) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Center(
-                child: Text('Orders', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-              ),
-              backgroundColor: Colors.grey[350],
-              toolbarHeight: 100,
+      builder: (context, orderProvider, child) {
+        final orders = orderProvider.orders;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Center(
+              child: Text('Orders', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
             ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: OrdersDrawer()),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<OrderProvider>().setOrder(false);
-                    },
-                    child: Icon(Icons.turned_in, color: Colors.black),
-                  )
-                ],
-              ),
-            ),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: Center(
-                child: Text('Orders', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-              ),
-              backgroundColor: Colors.grey[350],
-              toolbarHeight: 100,
-            ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.receipt, size: 100),
-                  Text('No Orders Yet', 
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+            backgroundColor: Colors.grey[350],
+            toolbarHeight: 100,
+          ),
+          body: orders.isNotEmpty
+              ? ListView.builder(
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
+                    return ListTile(
+                      leading: const Icon(Icons.receipt_long),
+                      title: Text(order['category']),
+                      subtitle: Text(order['description']),
+                      trailing: SizedBox(
+                        width: 150,
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Text("\$${order['price']?.toStringAsFixed(2)}"),
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => 
+                                  EditOrder(
+                                    orderId: order['id'],
+                                    category: order['category'],
+                                    description: order['description'],
+                                    price: order['price'],
+                                    address: order['address'],
+                                  ),
+                                )).then((_) {
+                                  context.read<OrderProvider>().fetchOrders();
+                                });
+                              }
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                OrdersService().deleteOrder(order['id']).then((_) {
+                                  context.read<OrderProvider>().fetchOrders();
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.receipt, size: 100),
+                      SizedBox(height: 20),
+                      Text(
+                        'No Orders Yet',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        'You have no active order right now.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.w400),
+                      ),
+                    ],
                   ),
-                  Text('You have no active order right now.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<OrderProvider>().setOrder(true);
-                    },
-                    child: Icon(Icons.turned_in, color: Colors.black),
-                  )
-                ],
-              ),
-            ),
-          );
-        }
+                ),
+        );
       },
     );
   }

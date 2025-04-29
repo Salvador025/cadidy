@@ -1,3 +1,5 @@
+import 'package:cadidy/service/users_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MenuDrawer extends StatefulWidget {
@@ -30,8 +32,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               backgroundColor: Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          onPressed: () {
+                          onPressed: () async{
+                            await FirebaseAuth.instance.signOut();
+                            UsersService.uid = null;
                             Navigator.of(context).pop();
+                            print('User logged out');
                           },
                           child: Text('Yes, Logout',
                               style: TextStyle(color: Colors.white))),

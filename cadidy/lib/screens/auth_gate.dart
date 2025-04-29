@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cadidy/screens/dashboard/home.dart';
+import 'package:cadidy/service/users_service.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -44,6 +45,8 @@ class AuthGate extends StatelessWidget {
             },
           );
         }
+        UsersService.uid = snapshot.data!.uid;
+        print('Usuario autenticado con UID: ${UsersService.uid}');
         return const Home();
       },
     );
