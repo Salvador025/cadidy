@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OrdersService {
   final CollectionReference orders = FirebaseFirestore.instance.collection('orders');
@@ -27,6 +28,22 @@ class OrdersService {
     } else {
       return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getOrdersByCategory(String category) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    QuerySnapshot snapshot = await orders
+        .where('category', isEqualTo: category)
+        .where('userId', isNotEqualTo: currentUserId)
+        .get();
+
+    return snapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        ...doc.data() as Map<String, dynamic>,
+      };
+    }).toList();
   }
 
   Future<void> addOrder(String uid, String category, String description, String address, double price) {

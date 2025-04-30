@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cadidy/screens/dashboard/home.dart';
 import 'package:cadidy/service/users_service.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart'; 
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -16,6 +17,7 @@ class AuthGate extends StatelessWidget {
           return SignInScreen(
             providers: [
               EmailAuthProvider(),
+              GoogleProvider(clientId: '690276078811-oal35u4arq6lohd79ksboehugnlae7va.apps.googleusercontent.com')
             ],
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
@@ -47,7 +49,7 @@ class AuthGate extends StatelessWidget {
         }
         UsersService.uid = snapshot.data!.uid;
         print('Usuario autenticado con UID: ${UsersService.uid}');
-        return const Home();
+        return Home();
       },
     );
   }

@@ -12,11 +12,19 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    // Cuando entras a esta pantalla, jalamos las órdenes
-    context.read<OrderProvider>().fetchOrders();
+
+    // Agrega un delay simulado antes de mostrar los datos
+    Future.delayed(const Duration(milliseconds: 400), () async {
+      await context.read<OrderProvider>().fetchOrders();
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
@@ -33,71 +41,77 @@ class _OrdersState extends State<Orders> {
             backgroundColor: Colors.grey[350],
             toolbarHeight: 100,
           ),
-          body: orders.isNotEmpty
-              ? ListView.builder(
-                  itemCount: orders.length,
-                  itemBuilder: (context, index) {
-                    final order = orders[index];
-                    return ListTile(
-                      leading: const Icon(Icons.receipt_long),
-                      title: Text(order['category']),
-                      subtitle: Text(order['description']),
-                      trailing: SizedBox(
-                        width: 150,
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Text("\$${order['price']?.toStringAsFixed(2)}"),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => 
-                                  EditOrder(
-                                    orderId: order['id'],
-                                    category: order['category'],
-                                    description: order['description'],
-                                    price: order['price'],
-                                    address: order['address'],
-                                  ),
-                                )).then((_) {
-                                  context.read<OrderProvider>().fetchOrders();
-                                });
-                              }
+          body: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : orders.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: orders.length,
+                      itemBuilder: (context, index) {
+                        final order = orders[index];
+                        return ListTile(
+                          leading: const Icon(Icons.receipt_long),
+                          title: Text(order['category']),
+                          subtitle: Text(order['description']),
+                          trailing: SizedBox(
+                            width: 150,
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Text("\$${order['price']?.toStringAsFixed(2)}"),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditOrder(
+                                          orderId: order['id'],
+                                          category: order['category'],
+                                          description: order['description'],
+                                          price: order['price'],
+                                          address: order['address'],
+                                        ),
+                                      ),
+                                    ).then((_) {
+                                      context.read<OrderProvider>().fetchOrders();
+                                    });
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    OrdersService().deleteOrder(order['id']).then((_) {
+                                      context.read<OrderProvider>().fetchOrders();
+                                    });
+                                  },
+                                )
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                OrdersService().deleteOrder(order['id']).then((_) {
-                                  context.read<OrderProvider>().fetchOrders();
-                                });
-                              },
-                            )
-                          ],
-                        ),
+                          ),
+                        );
+                      },
+                    )
+                  : const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.receipt, size: 100),
+                          SizedBox(height: 20),
+                          Text(
+                            'No Orders Yet',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          Text(
+                            'You have no active order right now.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.receipt, size: 100),
-                      SizedBox(height: 20),
-                      Text(
-                        'No Orders Yet',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        'You have no active order right now.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
         );
       },
     );
   }
 }
+

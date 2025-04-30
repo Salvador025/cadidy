@@ -1,11 +1,12 @@
+import 'package:cadidy/screens/hireService/hiring_service.dart';
 import 'package:cadidy/screens/placeOrder/place_order.dart';
 import 'package:flutter/material.dart';
 
 class ServiceButton extends StatefulWidget {
-  const ServiceButton(
-      {super.key, required this.imageURL, required this.labelService});
+  const ServiceButton({super.key, required this.imageURL, required this.labelService, this.isHiringFlow = false});
   final String imageURL;
   final String labelService;
+  final bool isHiringFlow;
 
   @override
   State<ServiceButton> createState() => _ServiceButtonState();
@@ -20,12 +21,27 @@ class _ServiceButtonState extends State<ServiceButton> {
       padding: const EdgeInsets.all(10),
       child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
+            if (widget.isHiringFlow) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Hiringservice(
+                    labelService: widget.labelService,
+                    nameImage: widget.imageURL,
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => PlaceOrder(
                         labelService: widget.labelService,
-                        nameImage: widget.imageURL)));
+                        nameImage: widget.imageURL
+                  )
+                )
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,

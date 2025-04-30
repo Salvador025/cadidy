@@ -1,3 +1,4 @@
+import 'package:cadidy/screens/hireService/services.dart';
 import 'package:cadidy/service/users_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,12 +109,19 @@ class _MenuDrawerState extends State<MenuDrawer> {
             child: ListTile(
               leading: Icon(Icons.work_rounded, color: Colors.white),
               title: Text(
-                'Become a worker',
+                'Hire a service',
                 style: TextStyle(color: Colors.white),
               ),
               trailing:
                   Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ServicesScreen(),
+                  ),
+                );
+              },
             )),
         Container(
             padding: const EdgeInsets.only(top: 10),
