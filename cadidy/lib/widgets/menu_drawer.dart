@@ -1,4 +1,5 @@
 import 'package:cadidy/screens/hireService/services.dart';
+import 'package:cadidy/screens/profile/profile.dart';
 import 'package:cadidy/service/users_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               backgroundColor: Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          onPressed: () async{
+                          onPressed: () async {
                             await FirebaseAuth.instance.signOut();
                             UsersService.uid = null;
                             Navigator.of(context).pop();
@@ -81,7 +82,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
             ),
             trailing:
                 Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
+            },
           ),
         ),
         Container(

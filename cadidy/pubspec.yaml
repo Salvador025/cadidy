@@ -93,6 +93,7 @@ flutter:
     - assets/images/dogWalk_service.png
     - assets/images/veterinarian_service.png
     - assets/images/Icon.png
+    - assets/images//profile_placeholder.png
 
     - assets\images\service_icons\barber.jpg
     - assets\images\service_icons\carpenter.jpg
