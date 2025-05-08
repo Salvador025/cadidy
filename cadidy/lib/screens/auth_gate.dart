@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cadidy/screens/dashboard/home.dart';
+import 'package:cadidy/screens/dashboard/user_form_page.dart'; // Importar la nueva página
 import 'package:cadidy/service/users_service.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart'; 
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -47,9 +48,32 @@ class AuthGate extends StatelessWidget {
             },
           );
         }
+
+        // Guardar UID y correo electrónico en UsersService
         UsersService.uid = snapshot.data!.uid;
+        UsersService.email = snapshot.data!.email!;
         print('Usuario autenticado con UID: ${UsersService.uid}');
-        return Home();
+        print('Correo electrónico del usuario: ${UsersService.email}');
+
+        // Usar FutureBuilder para manejar la lógica asíncrona
+        return FutureBuilder<bool>(
+          future: UsersService.doesUIDExist(UsersService.uid!),
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (asyncSnapshot.hasError) {
+              return const Center(child: Text('Error verificando el UID.'));
+            } else if (asyncSnapshot.data == true) {
+              // Si el UID ya existe, redirigir a Home
+              print('El UID existe en la base de datos.');
+              return const Home();
+            } else {
+              // Si el UID no existe, redirigir al formulario
+              print('El UID no existe en la base de datos.');
+              return const UserFormPage();
+            }
+          },
+        );
       },
     );
   }

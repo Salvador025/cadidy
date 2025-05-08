@@ -2,20 +2,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsersService {
   static String? uid;
+  static String? email; // Nueva variable para guardar el correo electrónico
 
   static Future<void> saveUserData({
     required String uid,
     required String email,
     required String displayName,
+    required String lastName,
+    required String address,
+    required String profilePicture,
+    required String phone,
+    required String username,
   }) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'uid': uid,
       'email': email,
       'name': displayName,
-      'lastname': '',
+      'lastName': lastName,
       'registryDate': DateTime.now(),
-      'address': '',
-      'profilePicture': '',
+      'adress': address,
+      'profilePicture': profilePicture,
+      'phone': phone,
+      'username': username,
     });
   }
+
+  static Future<bool> doesUIDExist(String uid) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: uid)
+          .get();
+
+      // Si hay documentos en el snapshot, el UID existe
+      return snapshot.docs.isNotEmpty;
+    } catch (e) {
+      // Manejo de errores (opcional)
+      print('Error al buscar el UID: $e');
+      return false;
+    }
+  }
 }
+
