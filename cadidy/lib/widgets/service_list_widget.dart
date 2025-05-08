@@ -11,7 +11,6 @@ class ServiceListWidget extends StatefulWidget {
 }
 
 class _ServiceListWidgetState extends State<ServiceListWidget> {
-
   Future<List<dynamic>>? _servicesList;
 
   void _loadServices() {
@@ -50,7 +49,7 @@ class _ServiceListWidgetState extends State<ServiceListWidget> {
               final service = services[index];
               return ListTile(
                 leading: Icon(Icons.check_circle),
-                title: Text('Barber Service'),
+                title: Text(widget.category),
                 subtitle: Text('Price: \$${service['price']}'),
                 onTap: () {
                   Navigator.push(
@@ -80,6 +79,6 @@ class _ServiceListWidgetState extends State<ServiceListWidget> {
   Widget build(BuildContext context) {
     return Expanded(
       child: _buildServiceList(),
-      );
+    );
   }
 }

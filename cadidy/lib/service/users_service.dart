@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersService {
   static String? uid;
@@ -42,5 +43,16 @@ class UsersService {
       return false;
     }
   }
-}
 
+  static Future<void> updateUserField(String field, dynamic value) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        field: value,
+      });
+    } catch (e) {
+      print('Error updating user field: $e');
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cadidy/service/users_service.dart';
 
 class EditInfoPage extends StatefulWidget {
   final String title;
@@ -93,8 +94,12 @@ class _EditInfoPageState extends State<EditInfoPage> {
                             color: Colors.white,
                           ),
                           label: const Text('Save Changes'),
-                          onPressed: () {
-                            // Save gender
+                          onPressed: () async {
+                            if (_selectedGender != null) {
+                              await UsersService.updateUserField(
+                                  'gender', _selectedGender);
+                              if (context.mounted) Navigator.pop(context);
+                            }
                           },
                         ),
                         const SizedBox(height: 16),
@@ -111,14 +116,45 @@ class _EditInfoPageState extends State<EditInfoPage> {
             else ...[
               TextField(
                 controller: _controller,
-                decoration: const InputDecoration(
+                style: const TextStyle(color: Colors.white),
+                cursorColor: Colors.white,
+                decoration: InputDecoration(
                   labelText: 'New value',
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 170, 126, 74)),
+                  ),
+                  fillColor: Color.fromARGB(255, 102, 93, 85),
+                  filled: true,
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  // Save text info
+                onPressed: () async {
+                  final String newValue = _controller.text.trim();
+                  if (newValue.isNotEmpty) {
+                    final String field = widget.title
+                            .toLowerCase()
+                            .contains('name')
+                        ? 'name'
+                        : widget.title.toLowerCase().contains('email')
+                            ? 'email'
+                            : widget.title.toLowerCase().contains('contact')
+                                ? 'phone'
+                                : widget.title.toLowerCase().contains('address')
+                                    ? 'adress'
+                                    : '';
+                    if (field.isNotEmpty) {
+                      print("Updating field: $field with value: $newValue");
+                      await UsersService.updateUserField(field, newValue);
+
+                      if (context.mounted) Navigator.pop(context);
+                    }
+                  }
                 },
                 child: const Text(
                   'Save Changes',

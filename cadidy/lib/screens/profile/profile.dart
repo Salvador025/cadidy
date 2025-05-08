@@ -91,12 +91,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         bottom: 0,
                         right: 4,
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const EditPhotoPage()),
                             );
+                            await _loadUserData();
                           },
                           child: Container(
                             decoration: const BoxDecoration(
@@ -142,51 +143,58 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.all(8),
                   children: [
                     _buildListTile(context, Icons.person_outline, 'Name', name,
-                        () {
-                      Navigator.push(
+                        () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 EditInfoPage(title: 'Edit Name', info: name)),
                       );
+                      await _loadUserData();
                     }),
                     _buildListTile(
-                        context, Icons.email_outlined, 'Email', email, () {
-                      Navigator.push(
+                        context, Icons.email_outlined, 'Email', email,
+                        () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 EditInfoPage(title: 'Edit Email', info: email)),
                       );
+                      await _loadUserData();
                     }),
                     _buildListTile(
-                        context, Icons.phone_outlined, 'Contact', phone, () {
-                      Navigator.push(
+                        context, Icons.phone_outlined, 'Contact', phone,
+                        () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditInfoPage(
                                 title: 'Edit Contact', info: phone)),
                       );
+                      await _loadUserData();
                     }),
                     _buildListTile(
                         context, Icons.transgender_outlined, 'Gender', gender,
-                        () {
-                      Navigator.push(
+                        () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditInfoPage(
                                 title: 'Edit Gender', info: gender)),
                       );
+                      await _loadUserData();
                     }),
                     _buildListTile(
                         context, Icons.location_on_outlined, 'Address', address,
-                        () {
-                      Navigator.push(
+                        () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditInfoPage(
                                 title: 'Edit Address', info: address)),
                       );
+                      await _loadUserData();
                     }),
                   ],
                 ),
