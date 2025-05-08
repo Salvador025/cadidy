@@ -1,27 +1,61 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'edit_info.dart';
 import 'edit_photo.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
-  final String userName = 'User Name';
-  final String userEmail = 'example@example.com';
-  final String userPhone = '+1 (555) 123-4567';
-  final String userGender = 'Not specified';
-  final String address =
-      'ITESO, 8585, Anillo Periférico Sur Manuel Gómez Morín, Tlaquepaque, San Pedro Tlaquepaque, Región Centro, Jalisco, 45604, México';
-  final String profileImage = 'assets/images/profile_placeholder.png';
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  Map<String, dynamic>? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      final doc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (doc.exists) {
+        setState(() {
+          userData = doc.data();
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (userData == null) {
+      return const Scaffold(
+        backgroundColor: Color.fromARGB(255, 63, 59, 55),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final String name = userData!["name"] ?? "";
+    final String email = userData!["email"] ?? "";
+    final String phone = userData!["phone"] ?? "";
+    final String gender = userData!["gender"] ?? "Not specified";
+    final String address = userData!["adress"] ?? "";
+    final String profileImage = (userData!["profilePicture"] != null &&
+            userData!["profilePicture"].toString().startsWith("http"))
+        ? userData!["profilePicture"]
+        : 'assets/images/profile_placeholder.png';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Profile",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Color.fromARGB(255, 88, 82, 76),
+        title: const Text("Profile", style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromARGB(255, 88, 82, 76),
       ),
       backgroundColor: const Color.fromARGB(255, 63, 59, 55),
       body: Padding(
@@ -31,15 +65,16 @@ class ProfilePage extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 170, 126, 74),
-                      Color.fromARGB(255, 134, 98, 54),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 170, 126, 74),
+                    Color.fromARGB(255, 134, 98, 54),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: Column(
                 children: [
@@ -48,7 +83,9 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage(profileImage),
+                        backgroundImage: profileImage.startsWith('http')
+                            ? NetworkImage(profileImage)
+                            : AssetImage(profileImage) as ImageProvider,
                       ),
                       Positioned(
                         bottom: 0,
@@ -62,7 +99,7 @@ class ProfilePage extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
                             ),
@@ -76,16 +113,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    userName,
+                    name,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    userEmail,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
+                  Text(email, style: const TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
@@ -94,7 +128,7 @@ class ProfilePage extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 107, 96, 85),
+                  color: const Color.fromARGB(255, 107, 96, 85),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -107,53 +141,41 @@ class ProfilePage extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(8),
                   children: [
-                    _buildListTile(
-                        context, Icons.person_outline, 'Name', userName, () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditInfoPage(
-                            title: 'Edit Name',
-                            info: userName,
-                          ),
-                        ),
-                      );
-                    }),
-                    _buildListTile(
-                        context, Icons.email_outlined, 'Email', userEmail, () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditInfoPage(
-                            title: 'Edit Email',
-                            info: userEmail,
-                          ),
-                        ),
-                      );
-                    }),
-                    _buildListTile(
-                        context, Icons.phone_outlined, 'Contact', userPhone,
+                    _buildListTile(context, Icons.person_outline, 'Name', name,
                         () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditInfoPage(
-                            title: 'Edit Contact',
-                            info: userPhone,
-                          ),
-                        ),
+                            builder: (context) =>
+                                EditInfoPage(title: 'Edit Name', info: name)),
                       );
                     }),
-                    _buildListTile(context, Icons.transgender_outlined,
-                        'Gender', userGender, () {
+                    _buildListTile(
+                        context, Icons.email_outlined, 'Email', email, () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditInfoPage(
-                            title: 'Edit Gender',
-                            info: userGender,
-                          ),
-                        ),
+                            builder: (context) =>
+                                EditInfoPage(title: 'Edit Email', info: email)),
+                      );
+                    }),
+                    _buildListTile(
+                        context, Icons.phone_outlined, 'Contact', phone, () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditInfoPage(
+                                title: 'Edit Contact', info: phone)),
+                      );
+                    }),
+                    _buildListTile(
+                        context, Icons.transgender_outlined, 'Gender', gender,
+                        () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditInfoPage(
+                                title: 'Edit Gender', info: gender)),
                       );
                     }),
                     _buildListTile(
@@ -162,11 +184,8 @@ class ProfilePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditInfoPage(
-                            title: 'Edit Address',
-                            info: address,
-                          ),
-                        ),
+                            builder: (context) => EditInfoPage(
+                                title: 'Edit Address', info: address)),
                       );
                     }),
                   ],
@@ -183,20 +202,11 @@ class ProfilePage extends StatelessWidget {
   Widget _buildListTile(BuildContext context, IconData icon, String label,
       String value, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: Color.fromARGB(255, 170, 126, 74),
-      ),
-      title: Text(
-        label,
-        style: TextStyle(color: Colors.white),
-      ),
+      leading: Icon(icon, color: const Color.fromARGB(255, 170, 126, 74)),
+      title: Text(label, style: const TextStyle(color: Colors.white)),
       subtitle: Text(value, style: const TextStyle(color: Colors.white)),
-      trailing: const Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 16,
-        color: Colors.white,
-      ),
+      trailing: const Icon(Icons.arrow_forward_ios_rounded,
+          size: 16, color: Colors.white),
       onTap: onTap,
     );
   }

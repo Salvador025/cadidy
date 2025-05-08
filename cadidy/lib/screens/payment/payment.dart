@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -42,9 +45,46 @@ class _PaymentScreenState extends State<PaymentScreen> {
           filled: true,
           fillColor: Colors.grey[100],
         ),
-        validator: (value) => value == null || value.isEmpty ? 'Este campo es requerido' : null,
+        validator: (value) =>
+            value == null || value.isEmpty ? 'Este campo es requerido' : null,
       ),
     );
+  }
+
+  Future<void> _makeTestPayment() async {
+    try {
+      final url = Uri.parse(
+          'http://10.0.2.2:5001/cadidy-ac7b1/us-central1/createPaymentIntent');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'amount': 1000}), // $10.00 MXN
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Error al crear el PaymentIntent: ${response.body}');
+      }
+
+      final clientSecret = jsonDecode(response.body)['clientSecret'];
+
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'Cadidy',
+        ),
+      );
+
+      await Stripe.instance.presentPaymentSheet();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('¡Pago realizado con éxito!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
   }
 
   @override
@@ -52,10 +92,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-          child: Text('Payment', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+          child: Text('Payment',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
         ),
         automaticallyImplyLeading: false,
       ),
+      backgroundColor: const Color.fromARGB(255, 63, 59, 55),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -86,14 +128,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Procesando pago...')),
-                      );
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      await _makeTestPayment();
                     }
                   },
                   style: ElevatedButton.styleFrom(
