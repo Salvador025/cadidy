@@ -91,4 +91,15 @@ class OrdersService {
         .then((value) => print("Order deleted successfully!"))
         .catchError((error) => print("Failed to delete order: $error"));
   }
+
+  Future<List<Map<String, dynamic>>> getAllOrders() async {
+    QuerySnapshot snapshot = await orders.get();
+
+    return snapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        ...doc.data() as Map<String, dynamic>,
+      };
+    }).toList();
+  }
 }

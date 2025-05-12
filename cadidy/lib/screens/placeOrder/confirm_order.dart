@@ -87,11 +87,12 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('Service Details',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+        title: const Row(
+          children: [
+            Text('Service Details',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
+          ],
         ),
-        automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: const EdgeInsets.all(15),

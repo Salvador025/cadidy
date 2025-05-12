@@ -1,6 +1,7 @@
 import 'package:cadidy/screens/dashboard/notifications.dart';
 import 'package:cadidy/screens/dashboard/orders.dart';
 import 'package:cadidy/screens/hireService/services.dart';
+import 'package:cadidy/screens/map/orders_map.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> {
         ServicesScreen(),
         Orders(),
         Notifications(),
+        OrdersMapScreen()
       ][currentPage],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -68,7 +70,11 @@ class _HomeState extends State<Home> {
             NavigationDestination(
               icon: Icon(Icons.notifications_outlined),
               label: 'Notifications',
-            )
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.location_on),
+              label: 'Map',
+            ),
           ],
         ),
       ),

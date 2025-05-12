@@ -103,23 +103,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
               ],
             ),
             SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search services...',
-                prefixIcon: Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                // Implement search functionality here
-              },
-            ),
-            SizedBox(height: 10),
             Expanded(
               child: GridView.count(crossAxisCount: 2, children: [
                 ServiceButton(

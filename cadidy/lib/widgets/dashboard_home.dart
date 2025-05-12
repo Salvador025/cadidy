@@ -38,7 +38,7 @@ class _DashboardHomeState extends State<DashboardHome> {
           title: Row(
             children: [
               Text(
-                'Cadidy',
+                'Place an Order',
                 style: GoogleFonts.bebasNeue(fontSize: 30),
               ),
             ],
@@ -89,23 +89,6 @@ class _DashboardHomeState extends State<DashboardHome> {
                           color: Color.fromARGB(255, 170, 126, 74),
                           fontSize: 30)),
                 ],
-              ),
-              SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search services...',
-                  prefixIcon: Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onChanged: (value) {
-                  // Implement search functionality here
-                },
               ),
               SizedBox(height: 10),
               Expanded(

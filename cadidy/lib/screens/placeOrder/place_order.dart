@@ -5,17 +5,30 @@ import 'package:cadidy/widgets/address_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlaceOrder extends StatelessWidget {
-  PlaceOrder({super.key, required this.labelService, required this.nameImage});
+class PlaceOrder extends StatefulWidget {
+  const PlaceOrder(
+      {super.key, required this.labelService, required this.nameImage});
   final String labelService;
   final String nameImage;
+
+  @override
+  State<PlaceOrder> createState() => _PlaceOrderState();
+}
+
+class _PlaceOrderState extends State<PlaceOrder> {
   final OrdersService ordersService = OrdersService();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<AddressProvider>().reset());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Place Order',
+        title: const Text('Place Order',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
         backgroundColor: Colors.grey[350],
         toolbarHeight: 100,
@@ -27,8 +40,8 @@ class PlaceOrder extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                labelService,
-                style: TextStyle(
+                widget.labelService,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -38,38 +51,42 @@ class PlaceOrder extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(nameImage, height: 100, width: 100),
+              Image.asset(widget.nameImage, height: 100, width: 100),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text('Address',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ],
           ),
-          AddressDrawer(),
+          const AddressDrawer(),
           Consumer<AddressProvider>(builder: (context, value, child) {
             return ElevatedButton(
-              key: Key('place_order_button'),
+              key: const Key('place_order_button'),
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               onPressed: value.isFormValid
                   ? () {
-                      ordersService.addOrder(UsersService.uid!, labelService,
-                          value.details, value.address, value.price);
+                      ordersService.addOrder(
+                          UsersService.uid!,
+                          widget.labelService,
+                          value.details,
+                          value.address,
+                          value.price);
                       context.read<AddressProvider>().reset();
                       Navigator.pop(context);
                     }
                   : () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Please fill in the all address fields'),
                         backgroundColor: Colors.red,
                         duration: Duration(seconds: 5),
                       ));
                     },
-              child: Text('Place Order'),
+              child: const Text('Place Order'),
             );
           })
         ]),
