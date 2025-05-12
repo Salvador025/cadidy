@@ -43,7 +43,6 @@ class _DashboardHomeState extends State<DashboardHome> {
               ),
             ],
           ),
-          automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 170, 126, 74),
           toolbarHeight: 85,
           iconTheme: IconThemeData(
@@ -147,7 +146,6 @@ class _DashboardHomeState extends State<DashboardHome> {
               ),
             ],
           ),
-        )
-      );
+        ));
   }
 }

@@ -18,7 +18,9 @@ class AuthGate extends StatelessWidget {
           return SignInScreen(
             providers: [
               EmailAuthProvider(),
-              GoogleProvider(clientId: '690276078811-oal35u4arq6lohd79ksboehugnlae7va.apps.googleusercontent.com')
+              GoogleProvider(
+                  clientId:
+                      '690276078811-oal35u4arq6lohd79ksboehugnlae7va.apps.googleusercontent.com')
             ],
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
@@ -56,8 +58,10 @@ class AuthGate extends StatelessWidget {
         print('Correo electrónico del usuario: ${UsersService.email}');
 
         // Usar FutureBuilder para manejar la lógica asíncrona
+        final usersService = UsersService();
+
         return FutureBuilder<bool>(
-          future: UsersService.doesUIDExist(UsersService.uid!),
+          future: usersService.doesUIDExist(UsersService.uid!),
           builder: (context, asyncSnapshot) {
             if (asyncSnapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

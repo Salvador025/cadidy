@@ -22,7 +22,8 @@ class _UserFormPageState extends State<UserFormPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      await UsersService.saveUserData(
+      final usersService = UsersService();
+      await usersService.saveUserData(
         uid: UsersService.uid!,
         email: UsersService.email!,
         displayName: displayName,
@@ -53,7 +54,8 @@ class _UserFormPageState extends State<UserFormPage> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Name'),
                 onSaved: (value) => displayName = value!,
-                validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter your name' : null,
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Last Name'),
@@ -64,7 +66,8 @@ class _UserFormPageState extends State<UserFormPage> {
                 onSaved: (value) => address = value!,
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Profile Picture URL'),
+                decoration:
+                    const InputDecoration(labelText: 'Profile Picture URL'),
                 onSaved: (value) => profilePicture = value!,
               ),
               TextFormField(

@@ -1,6 +1,6 @@
 import 'package:cadidy/screens/dashboard/notifications.dart';
 import 'package:cadidy/screens/dashboard/orders.dart';
-import 'package:cadidy/widgets/dashboard_home.dart';
+import 'package:cadidy/screens/hireService/services.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
-        DashboardHome(),
+        ServicesScreen(),
         Orders(),
         Notifications(),
       ][currentPage],

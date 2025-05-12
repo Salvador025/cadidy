@@ -60,8 +60,10 @@ class _OrdersState extends State<Orders> {
                                 height: 50,
                                 child: Row(
                                   children: [
-                                    Text(
-                                        "\$${order['price']?.toStringAsFixed(2)}"),
+                                    Expanded(
+                                      child: Text(
+                                          "\$${order['price']?.toStringAsFixed(2)}"),
+                                    ),
                                     IconButton(
                                       icon: const Icon(Icons.edit),
                                       onPressed: () {

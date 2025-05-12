@@ -3,9 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersService {
   static String? uid;
-  static String? email; // Nueva variable para guardar el correo electrónico
+  static String? email;
 
-  static Future<void> saveUserData({
+  final FirebaseFirestore firestore;
+  final FirebaseAuth auth;
+
+  UsersService({
+    FirebaseFirestore? firestore,
+    FirebaseAuth? auth,
+  })  : firestore = firestore ?? FirebaseFirestore.instance,
+        auth = auth ?? FirebaseAuth.instance;
+
+  Future<void> saveUserData({
     required String uid,
     required String email,
     required String displayName,
@@ -15,7 +24,7 @@ class UsersService {
     required String phone,
     required String username,
   }) async {
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+    await firestore.collection('users').doc(uid).set({
       'uid': uid,
       'email': email,
       'name': displayName,
@@ -28,27 +37,24 @@ class UsersService {
     });
   }
 
-  static Future<bool> doesUIDExist(String uid) async {
+  Future<bool> doesUIDExist(String uid) async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
+      QuerySnapshot snapshot = await firestore
           .collection('users')
           .where('uid', isEqualTo: uid)
           .get();
-
-      // Si hay documentos en el snapshot, el UID existe
       return snapshot.docs.isNotEmpty;
     } catch (e) {
-      // Manejo de errores (opcional)
       print('Error al buscar el UID: $e');
       return false;
     }
   }
 
-  static Future<void> updateUserField(String field, dynamic value) async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
+  Future<void> updateUserField(String field, dynamic value) async {
+    final uid = auth.currentUser?.uid;
     if (uid == null) return;
     try {
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      await firestore.collection('users').doc(uid).update({
         field: value,
       });
     } catch (e) {

@@ -1,6 +1,6 @@
-import 'package:cadidy/screens/hireService/services.dart';
 import 'package:cadidy/screens/profile/profile.dart';
 import 'package:cadidy/service/users_service.dart';
+import 'package:cadidy/widgets/dashboard_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -115,7 +115,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
             child: ListTile(
               leading: Icon(Icons.work_rounded, color: Colors.white),
               title: Text(
-                'Hire a service',
+                'Post a service',
                 style: TextStyle(color: Colors.white),
               ),
               trailing:
@@ -124,7 +124,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ServicesScreen(),
+                    builder: (context) => DashboardHome(),
                   ),
                 );
               },

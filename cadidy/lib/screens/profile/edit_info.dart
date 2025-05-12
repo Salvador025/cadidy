@@ -96,8 +96,10 @@ class _EditInfoPageState extends State<EditInfoPage> {
                           label: const Text('Save Changes'),
                           onPressed: () async {
                             if (_selectedGender != null) {
-                              await UsersService.updateUserField(
+                              final usersService = UsersService();
+                              await usersService.updateUserField(
                                   'gender', _selectedGender);
+
                               if (context.mounted) Navigator.pop(context);
                             }
                           },
@@ -150,7 +152,8 @@ class _EditInfoPageState extends State<EditInfoPage> {
                                     : '';
                     if (field.isNotEmpty) {
                       print("Updating field: $field with value: $newValue");
-                      await UsersService.updateUserField(field, newValue);
+                      final usersService = UsersService();
+                      await usersService.updateUserField(field, newValue);
 
                       if (context.mounted) Navigator.pop(context);
                     }
