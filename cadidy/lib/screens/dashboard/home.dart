@@ -29,12 +29,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: [
-        ServicesScreen(),
-        Orders(),
-        Notifications(),
-        OrdersMapScreen()
-      ][currentPage],
+      body: [ServicesScreen(), Orders(), OrdersMapScreen()][currentPage],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           backgroundColor: Color.fromARGB(255, 63, 59, 55),
