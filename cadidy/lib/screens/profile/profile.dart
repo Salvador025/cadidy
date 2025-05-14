@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'edit_info.dart';
 import 'edit_photo.dart';
 
@@ -13,11 +15,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   Map<String, dynamic>? userData;
+  File? _localImage;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _loadLocalImage();
   }
 
   Future<void> _loadUserData() async {
@@ -30,6 +34,17 @@ class _ProfilePageState extends State<ProfilePage> {
           userData = doc.data();
         });
       }
+    }
+  }
+
+  Future<void> _loadLocalImage() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final localPath = '${appDir.path}/profile_photo.jpg';
+    final file = File(localPath);
+    if (await file.exists()) {
+      setState(() {
+        _localImage = file;
+      });
     }
   }
 
@@ -47,10 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
     final String phone = userData!["phone"] ?? "";
     final String gender = userData!["gender"] ?? "Not specified";
     final String address = userData!["adress"] ?? "";
-    final String profileImage = (userData!["profilePicture"] != null &&
-            userData!["profilePicture"].toString().startsWith("http"))
-        ? userData!["profilePicture"]
-        : 'assets/images/profile_placeholder.png';
+
+    ImageProvider profileImageProvider = _localImage != null
+        ? FileImage(_localImage!)
+        : const AssetImage('assets/images/profile_placeholder.png');
 
     return Scaffold(
       appBar: AppBar(
@@ -83,9 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundImage: profileImage.startsWith('http')
-                            ? NetworkImage(profileImage)
-                            : AssetImage(profileImage) as ImageProvider,
+                        backgroundImage: profileImageProvider,
                       ),
                       Positioned(
                         bottom: 0,
@@ -97,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               MaterialPageRoute(
                                   builder: (context) => const EditPhotoPage()),
                             );
-                            await _loadUserData();
+                            await _loadLocalImage();
                           },
                           child: Container(
                             decoration: const BoxDecoration(

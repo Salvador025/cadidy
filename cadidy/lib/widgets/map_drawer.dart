@@ -220,7 +220,8 @@ class _MapDrawerState extends State<MapDrawer> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 170, 126, 74),
                         ),
-                        child: Text("Confirmar"),
+                        child: Text("Confirmar",
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
