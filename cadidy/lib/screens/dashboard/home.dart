@@ -68,10 +68,6 @@ class _HomeState extends State<Home> {
             NavigationDestination(
                 icon: Icon(Icons.receipt_outlined), label: 'Orders'),
             NavigationDestination(
-              icon: Icon(Icons.notifications_outlined),
-              label: 'Notifications',
-            ),
-            NavigationDestination(
               icon: Icon(Icons.location_on),
               label: 'Map',
             ),
